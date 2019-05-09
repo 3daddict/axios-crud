@@ -21,6 +21,24 @@ connection.connect(function(err) {
   console.log('Connected to database.');
 });
 
+
+app.post('/insert', function(req, res){
+  const user = {
+    firstname: req.query.firstname,
+    lastname: req.query.lastname,
+    email: req.query.email,
+    phone: req.query.phone
+  }
+  connection.query('INSERT INTO users SET ?', user, (err, rows) => {
+    if (err) {
+      console.error('An error occurred while executing the query')
+      throw err
+    }
+    console.log(rows)
+    res.end()
+  })
+});
+
 app.get('/get', (req, res) => {
   connection.query(`SELECT * FROM users`, (err, rows) => {
     if(err) throw err
