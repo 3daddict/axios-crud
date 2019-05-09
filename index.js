@@ -18,13 +18,17 @@ connection.connect(function(err) {
     console.error('Database connection failed: ' + err.stack);
     return;
   }
-
   console.log('Connected to database.');
 });
 
-connection.end();
-
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/get', (req, res) => {
+  connection.query(`SELECT * FROM users`, (err, rows) => {
+    if(err) throw err
+    console.log(rows);
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(rows))
+  })
+})
 
 
 app.listen(PORT, () => {
